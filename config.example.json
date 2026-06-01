@@ -1,0 +1,16 @@
+{
+  "llm_provider": "openai",
+  "anthropic_base_url": "",
+  "anthropic_api_key": "",
+  "anthropic_model": "claude-sonnet-4-5",
+  "openai_base_url": "https://api.openai.com",
+  "openai_api_key": "",
+  "openai_model": "gpt-4o",
+  "openai_api_mode": "responses",
+  "keep_topics_after_refine": false,
+  "refine_batch_concurrency": 2,
+  "screen_batch_size": 20,
+  "screen_batch_concurrency": 2,
+  "llm_retry_attempts": 2
+}
+

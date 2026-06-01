@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4f46e5;
+  --color-primary-light: #eef2ff;
+  --color-primary-dark: #3730a3;
+  --color-accent: #0f766e;
+  --color-cream: #fbfaf7;
+}
+
+.markdown-body h1 { @apply text-2xl font-bold mt-6 mb-3 text-slate-950; }
+.markdown-body h2 { @apply text-xl font-semibold mt-5 mb-2 text-slate-900; }
+.markdown-body h3 { @apply text-lg font-semibold mt-4 mb-2 text-slate-900; }
+.markdown-body p { @apply mb-3 leading-relaxed text-slate-700; }
+.markdown-body ul { @apply list-disc pl-6 mb-3; }
+.markdown-body ol { @apply list-decimal pl-6 mb-3; }
+.markdown-body li { @apply mb-1; }
+.markdown-body code { @apply bg-indigo-50 text-indigo-900 px-1.5 py-0.5 rounded text-sm font-mono; }
+.markdown-body pre { @apply bg-slate-950 text-slate-100 p-4 rounded-lg overflow-x-auto mb-3; }
+.markdown-body pre code { @apply bg-transparent text-inherit p-0; }
+.markdown-body blockquote { @apply border-l-4 border-teal-500 pl-4 italic text-slate-600 my-3; }
+.markdown-body table { @apply w-full border-collapse mb-3; }
+.markdown-body th, .markdown-body td { @apply border border-slate-200 px-3 py-2 text-sm; }
+.markdown-body th { @apply bg-stone-50 font-semibold; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.animate-pulse-dot { animation: pulse-dot 1.5s infinite; }
+
+@keyframes toast-progress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+.toast-progress { animation: toast-progress 2.5s linear forwards; }
+
+body {
+  @apply m-0 bg-stone-50 text-slate-700 text-sm antialiased;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+#root { @apply min-h-screen; }
+
+button, a, input, textarea, select {
+  @apply focus:outline-none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  @apply ring-2 ring-indigo-500/30 ring-offset-2 ring-offset-stone-50;
+}
+
+button {
+  @apply cursor-pointer;
+}
+
+button:disabled {
+  @apply cursor-not-allowed;
+}

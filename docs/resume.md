@@ -1,13 +1,13 @@
-# Resume Notes
+# 简历描述
 
-## One-Line Version
+## 一句话版本
 
-StarForge is a local-first Agent knowledge refinery that converts community posts and attachments into reusable AI `SKILL.md` packages.
+炼化星球是一个本地优先的社区知识炼化 Agent，可将知识星球帖子和附件转化为可复用的 AI `SKILL.md` 技能包。
 
-## Bullet Version
+## 项目亮点版本
 
-- Built a FastAPI + React application for authenticated community content collection, LLM relevance screening, attachment parsing, and Agent skill generation.
-- Designed a batch summarization pipeline with configurable concurrency, ordered SSE progress events, and final `SKILL.md` synthesis.
-- Added model gateway configuration, model-list fetching, connection testing, and ZIP export with `openai.yaml` metadata.
-- Implemented local-only storage and a public-release workflow that excludes API keys, access tokens, databases, downloaded attachments, and private generated content.
+- 基于 FastAPI + React 开发知识社区内容炼化工作台，支持扫码登录、帖子加载、附件解析、LLM 筛选和 Agent Skill 生成。
+- 设计分批摘要流水线，支持可配置并发、有序 SSE 进度展示和最终 `SKILL.md` 综合。
+- 支持 OpenAI/Anthropic 兼容模型配置、模型列表获取、连接测试，以及包含 `openai.yaml` 的 ZIP 技能包导出。
+- 采用本地优先存储和公开仓库脱敏流程，避免提交 API Key、访问 Token、数据库、下载附件和私有生成内容。
 

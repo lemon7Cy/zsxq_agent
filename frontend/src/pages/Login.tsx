@@ -86,7 +86,7 @@ export default function Login() {
         </div>
         <div>
           <p className="text-sm font-semibold text-slate-950">炼化星球</p>
-          <p className="text-xs text-slate-500">Knowledge Refinery Agent</p>
+          <p className="text-xs text-slate-500">社区知识炼化 Agent</p>
         </div>
       </div>
 

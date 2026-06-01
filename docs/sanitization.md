@@ -1,6 +1,6 @@
-# Sanitization Checklist
+# 脱敏检查清单
 
-Run these checks before publishing:
+发布前建议运行：
 
 ```bash
 find . -maxdepth 3 -type f | sort
@@ -8,12 +8,12 @@ rg -n "sk-|gho_|access_token|zsxq_access_token|Cookie|Authorization|api_key|oops
 git status --short
 ```
 
-Expected:
+期望结果：
 
-- no `data/` directory in git
-- no `.cache/` directory in git
-- no HAR files
-- no generated private skills
-- no real API keys or access tokens
-- no frontend build output or dependency directories
+- Git 提交中没有 `data/`
+- Git 提交中没有 `.cache/`
+- 没有 HAR 抓包文件
+- 没有私有生成 Skill
+- 没有真实 API Key 或访问 Token
+- 没有前端 build 产物或依赖目录
 

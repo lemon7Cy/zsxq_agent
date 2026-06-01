@@ -1,7 +1,7 @@
 """
-Knowledge Planet API encryption helper
+知识星球接口加密辅助模块
 
-Implements the current web client request envelope:
+实现当前 Web 客户端请求封装格式：
   - 客户端生成随机 AES-128 key 和 IV
   - RSA 加密 AES key → X-Key header
   - Base64(IV) → X-IV header

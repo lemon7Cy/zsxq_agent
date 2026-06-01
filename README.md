@@ -1,66 +1,68 @@
-# StarForge
+# 炼化星球
 
-StarForge is a local-first knowledge refinery for community content. It connects to a Knowledge Planet workspace, loads posts and attachments, filters out low-value or promotional content with an LLM, and turns selected material into reusable Agent `SKILL.md` packages.
+`zsxq_agent` 是一个本地优先的知识星球内容炼化工具。它可以登录知识星球、加载帖子和附件，用大模型筛掉广告/低价值内容，再把选中的资料整理成可复用的 Agent `SKILL.md` 技能包。
 
-The project is intentionally small, but the workflow is complete: content acquisition, quality screening, attachment parsing, concurrent batch summarization, final skill synthesis, model configuration, and ZIP export.
+这个项目的重点不是“多写几千行代码”，而是把一个完整的知识生产链路做通：内容采集、智能筛选、附件解析、并发分批摘要、最终 Skill 综合、模型配置、技能包导出。
 
-## Why It Exists
+## 项目背景
 
-Many expert communities contain high-density but messy knowledge: posts, comments, code snippets, compressed attachments, screenshots, version notes, and scattered troubleshooting details. StarForge turns that material into operational AI skills instead of ordinary summaries.
+很多技术社区里的知识密度很高，但形态很散：帖子、评论、源码片段、压缩包、配置文件、报错记录、工具链接、版本差异、踩坑经验混在一起。普通总结容易变成一段“读后感”，无法直接指导 AI Agent 工作。
 
-The generated output is designed for agents:
+炼化星球的目标是把这些非结构化内容沉淀成 Agent 可执行的操作手册：
 
-- concise English `SKILL.md` for direct model consumption
-- optional `references/target_leads.md` for concrete site/API/vendor clues
-- `agents/openai.yaml` metadata for skill catalogs
-- ZIP export that can be installed or shared as a skill package
+- `SKILL.md`：保留核心工作流、工具策略、判断规则和失败处理。
+- `references/target_leads.md`：保存具体站点、接口、关键词、工具线索。
+- `agents/openai.yaml`：生成 Skill 元信息，方便后续放入技能库。
+- ZIP 导出：可直接下载完整 Skill 包。
 
-## Features
+## 功能特性
 
-- WeChat QR login flow for Knowledge Planet sessions.
-- Group and topic browsing with a dense, practical dashboard UI.
-- One-click pagination loading for large topic sets.
-- LLM-assisted content screening to remove ads, thin posts, and unrelated material.
-- Attachment extraction for text, Markdown, source files, configs, scripts, JSON/YAML/TOML/XML/HTML/CSS/SQL, ZIP and tar archives.
-- Batch summarization with configurable concurrency and ordered progress events.
-- Final synthesis strategy that keeps operational workflows in the main `SKILL.md` and moves concrete target leads into references when useful.
-- OpenAI-compatible and Anthropic-compatible model configuration.
-- Model list fetching and connection testing for OpenAI-compatible gateways such as NewAPI, One API, and sub2api.
-- ZIP export containing `SKILL.md`, `agents/openai.yaml`, and generated `references/*.md`.
-- Local runtime storage only; no hosted backend and no telemetry.
+- 微信扫码登录知识星球。
+- 星球列表、帖子列表、附件信息浏览。
+- 一次性加载全部帖子，适合批量炼化。
+- LLM 智能筛选帖子，排除广告、推广、闲聊和内容不足的帖子。
+- 支持读取 `.txt`、`.md`、源码、配置、脚本、JSON/YAML/TOML/XML/HTML/CSS/SQL 等常见文本文件。
+- 支持解析 `.zip`、`.tar`、`.tar.gz`、`.tgz`、`.tar.bz2` 等压缩包。
+- 分批摘要支持可配置并发，并保证前端进度按批次顺序展示。
+- 最终只生成一份 `SKILL.md`，避免边流式输出边污染最终文档。
+- 支持 OpenAI 兼容接口和 Anthropic 兼容接口。
+- 支持模型列表获取、模型连接测试、配置保存。
+- 支持导出包含 `SKILL.md`、`agents/openai.yaml`、`references/*.md` 的 ZIP 包。
+- 所有运行数据默认只保存在本地，没有托管后端和遥测。
 
-## Architecture
+## 技术架构
 
 ```text
-frontend/                  React + TypeScript + Tailwind UI
-  src/pages/Topics.tsx     topic loading, selection, LLM screening
-  src/pages/Refine.tsx     streaming Agent workbench
-  src/pages/Config.tsx     model gateway configuration
+frontend/                  React + TypeScript + Tailwind 前端
+  src/pages/Topics.tsx     帖子加载、筛选、选择、批量加载
+  src/pages/Refine.tsx     炼化工作台，SSE 展示处理过程
+  src/pages/Config.tsx     模型配置、模型列表、连接测试
 
-backend/                   FastAPI backend
-  app.py                   API routes, SSE refine stream, config endpoints
-  zsxq_client.py           Knowledge Planet API client
-  refiner.py               batching, prompts, skill packaging
-  llm_client.py            OpenAI/Anthropic-compatible model client
-  db.py                    local SQLite state
+backend/                   FastAPI 后端
+  app.py                   API 路由、SSE 炼化流、模型配置接口
+  zsxq_client.py           知识星球接口客户端
+  refiner.py               分批、Prompt、Skill 生成与打包
+  llm_client.py            OpenAI/Anthropic 兼容模型调用
+  db.py                    本地 SQLite 状态管理
 
-data/                      local runtime directory, ignored by git
+data/                      本地运行目录，已被 git 忽略
 ```
 
-## Skill Generation Pipeline
+## 炼化流程
 
-1. Load selected posts and local cached topic details.
-2. Download and parse supported attachments.
-3. Split source material by prompt size and by post count to avoid over-compression.
-4. Generate compact intermediate digests concurrently.
-5. Emit progress events in batch order even when LLM calls finish out of order.
-6. Synthesize one final `SKILL.md`.
-7. If concrete target/API leads make the skill too noisy, move them to `references/target_leads.md`.
-8. Generate `agents/openai.yaml` and save a downloadable ZIP package.
+1. 选择星球和帖子。
+2. 加载帖子详情、评论和附件。
+3. 提取附件中的文本、Markdown、源码和配置内容。
+4. 按提示词长度和帖子数量拆分批次，避免短帖被过度压缩。
+5. 并发生成每批中间摘要。
+6. SSE 按批次顺序返回处理进度，前端不会乱序滚动。
+7. 汇总所有批次摘要，生成唯一最终 `SKILL.md`。
+8. 如果具体站点/API 线索太多，自动拆到 `references/target_leads.md`。
+9. 生成 `agents/openai.yaml`，保存本地记录，并支持 ZIP 下载。
 
-## Setup
+## 本地运行
 
-### Backend
+### 后端
 
 ```bash
 cd backend
@@ -70,7 +72,7 @@ pip install -r ../requirements.txt
 uvicorn app:app --host 0.0.0.0 --port 8100
 ```
 
-### Frontend
+### 前端
 
 ```bash
 cd frontend
@@ -78,28 +80,34 @@ npm install
 npm run dev -- --host 0.0.0.0 --port 3002
 ```
 
-Open `http://127.0.0.1:3002`.
+然后打开：
 
-## Configuration
+```text
+http://127.0.0.1:3002
+```
 
-Configuration is stored locally at `data/config.json` and is ignored by git. You can configure it from the UI, or start from:
+## 模型配置
+
+配置文件保存在本地 `data/config.json`，不会提交到 Git。
+
+你可以直接在前端“模型配置”页面填写，也可以复制示例配置：
 
 ```bash
 mkdir -p data
 cp config.example.json data/config.json
 ```
 
-For OpenAI-compatible gateways:
+OpenAI 兼容中转站通常这样填：
 
-- Base URL usually looks like `https://your-gateway.example.com`
-- model list is requested from `/v1/models`
-- `openai_api_mode` can be `responses` or `chat`
+- Base URL：`https://your-gateway.example.com`
+- 模型列表接口：`/v1/models`
+- 调用模式：`responses` 或 `chat`
 
-## Privacy And Safety
+## 隐私与安全
 
-This repository does not include real community posts, attachments, model keys, access tokens, cookies, local databases, generated skills, HAR files, or logs.
+公开仓库不包含真实帖子、附件、模型 Key、访问 Token、Cookie、本地数据库、生成的私有 Skill、HAR 抓包或运行日志。
 
-Before publishing or sharing your own fork, check that these paths are not committed:
+这些路径不应该提交：
 
 - `data/`
 - `.cache/`
@@ -108,13 +116,9 @@ Before publishing or sharing your own fork, check that these paths are not commi
 - `frontend/dist/`
 - `node_modules/`
 
-Use StarForge only for content and communities you are authorized to access. Generated skills should preserve operational knowledge without exposing private member content or confidential attachments.
+请只在你有权限访问和处理的内容范围内使用本项目。生成的 Skill 应该沉淀可复用的方法论和工具流程，不应泄露私有社区成员内容或敏感附件。
 
-## Public Demo Data
+## 简历描述参考
 
-This repo intentionally ships without real Knowledge Planet content. If you want a public demo, create synthetic posts or a mock connector instead of committing private community data.
-
-## Resume-Friendly Summary
-
-Built a local-first community knowledge refinery that transforms unstructured posts and attachments into reusable AI Agent skills. The system includes authenticated content loading, LLM-based relevance screening, archive/source parsing, concurrent batch summarization, ordered SSE progress reporting, model gateway configuration, and skill package export.
+开发“炼化星球”：一个本地优先的社区知识炼化 Agent。系统支持知识星球登录采集、LLM 内容筛选、附件/压缩包解析、并发分批摘要、SSE 有序进度展示、模型网关配置与 Agent Skill 包导出，可将非结构化社区内容转化为可复用的 AI 工作流。
 

@@ -1,7 +1,7 @@
 """
-Knowledge Planet API request signing helper
+知识星球接口签名辅助模块
 
-Current web client signature shape:
+当前 Web 客户端签名格式：
   x-signature = SHA1(url + " " + timestamp + " " + request_id)
 
 其中:

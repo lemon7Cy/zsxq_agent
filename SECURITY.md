@@ -1,17 +1,17 @@
-# Security Policy
+# 安全说明
 
-StarForge stores runtime credentials and downloaded content locally under `data/` and `.cache/`. These paths are ignored by git and must never be committed.
+炼化星球会把运行凭据和下载内容保存在本地 `data/` 与 `.cache/` 目录下。这些路径已被 git 忽略，不应该提交到公开仓库。
 
-## What Not To Publish
+## 不要发布的内容
 
-- API keys or model gateway tokens
-- Knowledge Planet access tokens or cookies
-- SQLite runtime databases
-- downloaded attachments
-- generated skills based on private community content
-- HAR captures or browser dumps
+- 模型 API Key 或中转站 Token
+- 知识星球访问 Token 或 Cookie
+- SQLite 运行数据库
+- 下载的附件
+- 基于私有社区内容生成的 Skill
+- HAR 抓包或浏览器 dump 文件
 
-## Reporting
+## 反馈安全问题
 
-If you find a security issue in this project, open a private advisory or contact the maintainer directly before publishing details.
+如果你发现安全问题，请优先通过私下方式联系维护者，不要直接公开敏感细节。
 

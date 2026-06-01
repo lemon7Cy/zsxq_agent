@@ -1,29 +1,29 @@
-# Architecture Notes
+# 架构说明
 
-StarForge is a two-process local application:
+炼化星球是一个本地双进程应用：
 
-- FastAPI backend for login, source loading, attachment parsing, LLM calls, and skill packaging.
-- Vite React frontend for browsing, screening, streaming progress, and reviewing generated skills.
+- FastAPI 后端负责登录、内容加载、附件解析、模型调用和 Skill 打包。
+- Vite React 前端负责浏览星球、筛选帖子、展示炼化过程和查看最终产物。
 
-## Data Flow
+## 数据流
 
 ```text
-Knowledge Planet
+知识星球
   -> backend/zsxq_client.py
-  -> local SQLite and topic cache
-  -> LLM screening
-  -> attachment extraction
-  -> batch digest generation
-  -> final SKILL synthesis
-  -> local skill package
-  -> frontend review/download
+  -> 本地 SQLite 与帖子缓存
+  -> LLM 内容筛选
+  -> 附件文本提取
+  -> 分批摘要
+  -> 最终 SKILL 综合
+  -> 本地 Skill 包
+  -> 前端查看/下载
 ```
 
-## Design Decisions
+## 设计取舍
 
-- Runtime data stays local and is excluded from git.
-- LLM calls are configurable through the UI instead of hard-coded backend constants.
-- Large corpora are split by prompt size and by topic count to avoid losing short-post coverage.
-- Batch LLM calls can run concurrently, but SSE events are emitted in order for a readable UI.
-- Final skills keep core workflows in `SKILL.md`; concrete target leads can move into references.
+- 运行数据只保存在本地，并通过 `.gitignore` 排除。
+- 模型配置通过前端填写，不在后端写死。
+- 大规模内容同时按提示词长度和帖子数量拆分，避免短帖被一个批次压缩掉。
+- 批次摘要可以并发生成，但 SSE 事件按批次顺序输出，保证页面阅读体验。
+- 主 `SKILL.md` 保留完整工作流，具体站点/API 线索按需拆到 `references/target_leads.md`。
 

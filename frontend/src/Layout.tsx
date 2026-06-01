@@ -30,7 +30,7 @@ export default function Layout() {
           </div>
           <div>
             <p className="text-base font-semibold text-slate-950">炼化星球</p>
-            <p className="mt-0.5 text-xs text-slate-500">Knowledge Refinery</p>
+            <p className="mt-0.5 text-xs text-slate-500">社区知识炼化 Agent</p>
           </div>
         </div>
       </div>

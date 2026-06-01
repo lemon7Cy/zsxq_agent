@@ -36,6 +36,20 @@ class ZsxqClient:
         r.raise_for_status()
         return r.json()
 
+    def get_me(self) -> dict:
+        data = self._get("https://api.zsxq.com/v2/users/self")
+        if not data.get("succeeded"):
+            raise RuntimeError(f"拉取账号信息失败: {data}")
+        user = data.get("resp_data", {}).get("user", {}) or {}
+        return {
+            "user_id": str(user.get("user_id") or user.get("uid") or ""),
+            "name": user.get("name", ""),
+            "avatar_url": user.get("avatar_url", ""),
+            "location": user.get("location", ""),
+            "unique_id": user.get("unique_id", ""),
+            "user_sid": user.get("user_sid", ""),
+        }
+
     def get_groups(self) -> list[dict]:
         data = self._get("https://api.zsxq.com/v2/groups")
         if not data.get("succeeded"):
@@ -50,6 +64,12 @@ class ZsxqClient:
                 "group_id": str(g["group_id"]),
                 "name": g.get("name", ""),
                 "type": g.get("type", ""),
+                "avatar_url": (
+                    g.get("avatar_url")
+                    or g.get("icon_url")
+                    or g.get("icon")
+                    or owner.get("avatar_url", "")
+                ),
                 "owner_name": owner.get("name", ""),
                 "owner_avatar": owner.get("avatar_url", ""),
                 "background_url": g.get("background_url", ""),

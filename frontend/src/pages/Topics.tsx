@@ -19,6 +19,7 @@ import { ImagePreview } from '../components/ImagePreview'
 import { useToast } from '../components/Toast'
 import { api } from '../api'
 import { getErrorMessage } from '../errors'
+import { readCurrentGroup, writeCurrentGroup } from '../currentGroup'
 
 interface TopicImage {
   image_id: string
@@ -48,6 +49,8 @@ interface Topic {
 
 interface TopicLocationState {
   groupName?: string
+  groupAvatar?: string
+  groupBackground?: string
   iterateSkillId?: number
 }
 
@@ -180,7 +183,9 @@ export default function Topics() {
   const navigate = useNavigate()
   const toast = useToast()
   const state = (location.state as TopicLocationState | null) || {}
-  const groupName = state.groupName || '星球'
+  const cachedGroup = readCurrentGroup()
+  const isCachedGroup = Boolean(cachedGroup && cachedGroup.id === groupId)
+  const groupName = state.groupName || (isCachedGroup && cachedGroup ? cachedGroup.name : '') || '星球'
   const iterateSkillId = state.iterateSkillId
 
   const [topics, setTopics] = useState<Topic[]>([])
@@ -195,6 +200,25 @@ export default function Topics() {
   const [skillTitle, setSkillTitle] = useState('')
   const [saveMode, setSaveMode] = useState<'temp' | 'permanent'>('temp')
   const [previewImg, setPreviewImg] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!groupId || groupName === '星球') return
+    writeCurrentGroup({
+      id: groupId,
+      name: groupName,
+      avatar: state.groupAvatar || (isCachedGroup && cachedGroup ? cachedGroup.avatar : ''),
+      background: state.groupBackground || (isCachedGroup && cachedGroup ? cachedGroup.background : ''),
+    })
+  }, [
+    cachedGroup?.avatar,
+    cachedGroup?.background,
+    cachedGroup?.id,
+    groupId,
+    groupName,
+    isCachedGroup,
+    state.groupAvatar,
+    state.groupBackground,
+  ])
 
   const loadTopics = useCallback(async (endTime = '') => {
     const data = await api<{ topics: Topic[]; has_more: boolean }>(

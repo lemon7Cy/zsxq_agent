@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { CheckCircle, CircleAlert, FlaskConical, Loader2, RotateCw, ScanLine } from 'lucide-react'
+import { CheckCircle, CircleAlert, Loader2, RotateCw, ScanLine } from 'lucide-react'
 import { Spinner } from '../components/Spinner'
 import { api } from '../api'
 import { getErrorMessage } from '../errors'
+import { BrandMark } from '../components/BrandMark'
 
 type LoginStatus = 'loading' | 'pending' | 'scanned' | 'success' | 'expired' | 'cancelled' | 'error'
 
@@ -81,9 +82,7 @@ export default function Login() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(79,70,229,0.18),_transparent_34%),linear-gradient(135deg,#fbfaf7_0%,#eef2ff_48%,#ecfeff_100%)] p-4">
       <div className="absolute left-8 top-8 hidden items-center gap-3 md:flex">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 text-white shadow-lg shadow-indigo-600/20">
-          <FlaskConical size={21} />
-        </div>
+        <BrandMark className="h-11 w-11 drop-shadow-sm" />
         <div>
           <p className="text-sm font-semibold text-slate-950">炼化星球</p>
           <p className="text-xs text-slate-500">社区知识炼化 Agent</p>
@@ -119,9 +118,7 @@ export default function Login() {
         <section className="p-6 sm:p-8">
           <div className="mx-auto max-w-sm">
             <div className="mb-7 text-center">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 lg:hidden">
-                <FlaskConical size={23} />
-              </div>
+              <BrandMark className="mx-auto mb-3 h-12 w-12 lg:hidden" />
               <h2 className="text-xl font-semibold text-slate-950">登录工作台</h2>
               <p className="mt-1 text-sm text-slate-500">使用微信扫描知识星球授权二维码</p>
             </div>

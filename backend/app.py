@@ -159,6 +159,16 @@ def get_groups():
     return {"groups": groups}
 
 
+@app.get("/api/me")
+def get_me():
+    client = _get_client()
+    try:
+        profile = client.get_me()
+    finally:
+        client.close()
+    return {"profile": profile}
+
+
 @app.get("/api/groups/{group_id}/topics")
 def get_topics(group_id: str, count: int = 20, end_time: str = ""):
     client = _get_client()

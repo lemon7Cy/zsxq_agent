@@ -9,6 +9,7 @@ interface Group {
   group_id: string
   name: string
   type: string
+  avatar_url?: string
   owner_name: string
   owner_avatar: string
   background_url: string
@@ -18,8 +19,9 @@ interface Group {
 function GroupAvatar({ group }: { group: Group }) {
   const [failed, setFailed] = useState(false)
   const fallback = (group.name || '星')[0]
+  const avatar = group.avatar_url || group.owner_avatar
 
-  if (!group.owner_avatar || failed) {
+  if (!avatar || failed) {
     return (
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-indigo-100 bg-indigo-100 text-base font-semibold text-indigo-700 shadow-sm">
         {fallback}
@@ -29,7 +31,7 @@ function GroupAvatar({ group }: { group: Group }) {
 
   return (
     <img
-      src={group.owner_avatar}
+      src={avatar}
       alt=""
       className="h-12 w-12 shrink-0 rounded-lg border border-slate-200 object-cover shadow-sm"
       onError={() => setFailed(true)}
@@ -130,7 +132,13 @@ export default function Groups() {
           {groups.map(group => (
             <button
               key={group.group_id}
-              onClick={() => navigate(`/groups/${group.group_id}/topics`, { state: { groupName: group.name } })}
+              onClick={() => navigate(`/groups/${group.group_id}/topics`, {
+                state: {
+                  groupName: group.name,
+                  groupAvatar: group.avatar_url || group.owner_avatar,
+                  groupBackground: group.background_url,
+                },
+              })}
               className="group overflow-hidden rounded-xl border border-white/80 bg-white text-left shadow-sm shadow-slate-200/70 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-200"
             >
               <div className="relative h-28 overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-900 to-teal-700">

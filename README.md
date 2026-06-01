@@ -28,7 +28,7 @@
 - 支持 OpenAI 兼容接口和 Anthropic 兼容接口。
 - 支持模型列表获取、模型连接测试、配置保存。
 - 支持导出包含 `SKILL.md`、`agents/openai.yaml`、`references/*.md` 的 ZIP 包。
-- 所有运行数据默认只保存在本地，没有托管后端和遥测。
+- 运行数据默认保存在本地 `data/` 目录。
 
 ## 技术架构
 
@@ -45,7 +45,7 @@ backend/                   FastAPI 后端
   llm_client.py            OpenAI/Anthropic 兼容模型调用
   db.py                    本地 SQLite 状态管理
 
-data/                      本地运行目录，已被 git 忽略
+data/                      本地运行数据目录
 ```
 
 ## 炼化流程
@@ -88,7 +88,7 @@ http://127.0.0.1:3002
 
 ## 模型配置
 
-配置文件保存在本地 `data/config.json`，不会提交到 Git。
+配置文件保存在本地 `data/config.json`。
 
 你可以直接在前端“模型配置”页面填写，也可以复制示例配置：
 
@@ -102,23 +102,3 @@ OpenAI 兼容中转站通常这样填：
 - Base URL：`https://your-gateway.example.com`
 - 模型列表接口：`/v1/models`
 - 调用模式：`responses` 或 `chat`
-
-## 隐私与安全
-
-公开仓库不包含真实帖子、附件、模型 Key、访问 Token、Cookie、本地数据库、生成的私有 Skill、HAR 抓包或运行日志。
-
-这些路径不应该提交：
-
-- `data/`
-- `.cache/`
-- `*.har`
-- `js_dump/`
-- `frontend/dist/`
-- `node_modules/`
-
-请只在你有权限访问和处理的内容范围内使用本项目。生成的 Skill 应该沉淀可复用的方法论和工具流程，不应泄露私有社区成员内容或敏感附件。
-
-## 简历描述参考
-
-开发“炼化星球”：一个本地优先的社区知识炼化 Agent。系统支持知识星球登录采集、LLM 内容筛选、附件/压缩包解析、并发分批摘要、SSE 有序进度展示、模型网关配置与 Agent Skill 包导出，可将非结构化社区内容转化为可复用的 AI 工作流。
-

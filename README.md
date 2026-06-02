@@ -62,6 +62,36 @@ data/                      本地运行数据目录
 
 ## 本地运行
 
+### Docker 部署
+
+推荐生产或演示环境使用 Docker，一条命令同时启动前端和后端：
+
+```bash
+docker compose up -d --build
+```
+
+启动后打开：
+
+```text
+http://127.0.0.1:3002
+```
+
+容器内后端监听 `8100`，`docker-compose.yml` 会映射到宿主机 `3002`。前端已经在镜像构建阶段编译为静态文件，由 FastAPI 同源托管。
+
+运行数据会保存在本地：
+
+```text
+./data
+```
+
+常用命令：
+
+```bash
+docker compose logs -f
+docker compose restart
+docker compose down
+```
+
 ### 后端
 
 ```bash

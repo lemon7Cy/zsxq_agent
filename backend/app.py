@@ -4,11 +4,13 @@ import re
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from contextlib import asynccontextmanager
+from pathlib import Path
 from urllib.parse import urlencode
 
 import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 import db
 from config import load_config, save_config, DATA_DIR
@@ -1171,3 +1173,20 @@ def test_llm_config(update: LLMTestRequest):
 @app.get("/health")
 def health():
     return {"status": "ok", "time": int(time.time())}
+
+
+# ─── 生产环境前端静态资源 ─────────────────────────────────────
+
+FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+
+
+if FRONTEND_DIST.exists():
+    @app.get("/{path:path}", include_in_schema=False)
+    def serve_frontend(path: str = ""):
+        if path.startswith("api/"):
+            raise HTTPException(404, "API 不存在")
+        requested = (FRONTEND_DIST / path).resolve()
+        dist_root = FRONTEND_DIST.resolve()
+        if requested.is_file() and requested.is_relative_to(dist_root):
+            return FileResponse(requested)
+        return FileResponse(dist_root / "index.html")

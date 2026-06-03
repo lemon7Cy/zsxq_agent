@@ -1,4 +1,18 @@
-# 炼化星球
+<div align="center">
+
+# 炼化星球 / zsxq_agent
+
+**把知识星球帖子、附件和讨论炼化成可复用的 Agent Skill 包**
+
+![TypeScript](https://img.shields.io/badge/TypeScript-frontend-3178C6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-workbench-61DAFB?logo=react&logoColor=111)
+![FastAPI](https://img.shields.io/badge/FastAPI-backend-009688?logo=fastapi&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-local%20state-003B57?logo=sqlite&logoColor=white)
+![LLM](https://img.shields.io/badge/LLM-skill%20refiner-7C3AED)
+
+</div>
+
+## 项目简介
 
 `zsxq_agent` 是一个本地优先的知识星球内容炼化工具。它可以登录知识星球、加载帖子和附件，用大模型筛掉广告/低价值内容，再把选中的资料整理成可复用的 Agent `SKILL.md` 技能包。
 
